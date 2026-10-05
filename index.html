@@ -3,99 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="pageTitle">TOG | نظام الحضور الذكي</title>
+    <title id="pageTitle">نظام الحضور والإنصراف | Café & Roastery</title>
     <style>
         :root {
-            --primary: #5c3a21;
-            --primary-hover: #432917;
+            --primary: #f59e0b;
             --success: #10b981;
             --danger: #ef4444;
-            --card-bg: rgba(253, 250, 246, 0.95);
-            --text-color: #2c1e14;
-            --text-muted: #8c7355;
-            --border-color: rgba(92, 58, 33, 0.2);
-            --input-bg: rgba(245, 239, 230, 0.9);
-            --shadow: 0 20px 40px -10px rgba(44, 30, 20, 0.15);
-            --bg-gradient: linear-gradient(135deg, #f3ede2 0%, #e6d7c3 50%, #d4bc9e 100%);
-        }
-        .dark-mode {
-            --card-bg: rgba(26, 20, 16, 0.95);
-            --text-color: #f3ede2;
-            --text-muted: #b39c80;
-            --border-color: rgba(212, 188, 158, 0.25);
-            --input-bg: rgba(38, 30, 24, 0.9);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: rgba(245, 158, 11, 0.3);
+            --input-bg: rgba(30, 41, 59, 0.9);
             --shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6);
-            --bg-gradient: linear-gradient(135deg, #120d0a 0%, #1c1511 50%, #2b201a 100%);
+            --bg-gradient: linear-gradient(135deg, #090d16 0%, #172033 50%, #1e1b18 100%);
+        }
+        .light-mode {
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-color: #0f172a;
+            --text-muted: #64748b;
+            --border-color: rgba(245, 158, 11, 0.4);
+            --input-bg: rgba(241, 245, 249, 0.9);
+            --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
         }
         * { box-sizing: border-box; transition: background 0.3s, color 0.3s; }
         body {
             font-family: 'Inter', system-ui, sans-serif;
             background: var(--bg-gradient);
-            margin: 0; padding: 16px; color: var(--text-color);
+            margin: 0; padding: 12px; color: var(--text-color);
             min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
-        .top-header {
-            width: 100%; max-width: 420px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 0 4px;
+        .top-bar {
+            width: 100%; max-width: 440px; display: flex; justify-content: space-between; margin-bottom: 10px;
         }
-        .icon-btn {
+        .top-btn {
             background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color);
-            width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            font-size: 14px; font-weight: bold; box-shadow: var(--shadow);
+            padding: 8px 14px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 13px;
+            box-shadow: var(--shadow);
         }
-        .icon-btn:hover { transform: scale(1.05); }
-
         .container {
-            width: 100%; max-width: 420px; background: var(--card-bg);
-            padding: 28px 22px; border-radius: 24px; box-shadow: var(--shadow);
-            border: 1px solid var(--border-color); margin-bottom: 20px; backdrop-filter: blur(10px);
+            width: 100%; max-width: 440px; background: var(--card-bg);
+            padding: 24px 20px; border-radius: 20px; box-shadow: var(--shadow);
+            border: 1px solid var(--border-color); margin-bottom: 20px;
         }
-        
-        .brand-logo-container { text-align: center; margin-bottom: 15px; }
-        .brand-title {
-            font-family: 'Georgia', serif; font-size: 38px; font-weight: bold; color: var(--primary);
-            letter-spacing: 2px; margin: 0;
-        }
-        .dark-mode .brand-title { color: #d4bc9e; }
-        .brand-subtitle {
-            font-size: 11px; text-transform: uppercase; letter-spacing: 4px; color: var(--text-muted); margin-top: 4px;
-        }
-
-        h3 { text-align: center; margin-top: 0; font-size: 18px; }
-        .input-group { margin: 16px 0; }
+        h2, h3 { text-align: center; margin-top: 0; font-size: 20px; }
+        .input-group { margin: 14px 0; }
         input {
             width: 100%; padding: 14px 16px; border: 2px solid var(--border-color);
-            border-radius: 14px; font-size: 14px; outline: none; background: var(--input-bg); color: var(--text-color);
+            border-radius: 12px; font-size: 14px; outline: none; background: var(--input-bg); color: var(--text-color);
         }
-        input:focus { border-color: var(--primary); }
         button {
-            width: 100%; padding: 14px; margin: 8px 0; border-radius: 14px;
+            width: 100%; padding: 14px; margin: 8px 0; border-radius: 12px;
             font-size: 14px; font-weight: 700; cursor: pointer; border: none; color: white;
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        button:active { transform: scale(0.98); }
         .btn-in { background-color: var(--success); }
         .btn-out { background-color: var(--danger); }
         .btn-admin { background-color: var(--primary); }
-        .btn-admin:hover { background-color: var(--primary-hover); }
-        
-        .status { text-align: center; font-weight: 600; margin: 12px 0; padding: 10px; background: rgba(16, 185, 129, 0.1); color: var(--success); border-radius: 10px; font-size: 12px; }
+        .status { text-align: center; font-weight: 600; margin: 12px 0; padding: 10px; background: rgba(16, 185, 129, 0.15); color: #34d399; border-radius: 10px; font-size: 12px; }
         .hidden { display: none; }
     </style>
 </head>
-<body class="dark-mode">
+<body>
 
-    <div class="top-header">
-        <button class="icon-btn" id="langToggleBtn" onclick="toggleLanguage()" title="تغيير اللغة">EN</button>
-        <button class="icon-btn" id="themeToggleBtn" onclick="toggleTheme()" title="الوضع الليلي والنهاري">☀️</button>
+    <div class="top-bar">
+        <button class="top-btn" id="themeToggleBtn" onclick="toggleTheme()">☀️ / 🌙</button>
+        <button class="top-btn" id="langToggleBtn" onclick="toggleLanguage()">English</button>
     </div>
 
     <div class="container" id="employeeView">
-        <div class="brand-logo-container">
-            <h1 class="brand-title">TOG</h1>
-            <div class="brand-subtitle" id="brandSub">Specialty Coffee & Roastery</div>
-        </div>
-
+        <h2 id="mainHeading">☕ نظام الحضور الذكي</h2>
         <div class="status" id="syncStatus">🛡️ مزمّن سحابياً مع الإدارة وبصمة الجهاز</div>
         
         <div class="input-group">
@@ -120,29 +97,22 @@
     </div>
 
     <div class="container hidden" id="adminDashboardView" style="max-width: 500px;">
-        <h3 style="color: var(--primary);" id="dashHeading">📊 لوحة التحكم السحابية - TOG</h3>
-        <p style="font-size:13px; color:var(--text-muted); text-align:center;" id="dashDesc">جميع السجلات تذهب مباشرة إلى ملف Google Sheets الخاص بك وتظهر هناك فوراً!</p>
+        <h3 style="color: var(--primary);" id="dashHeading">📊 لوحة التحكم السحابية</h3>
+        <p style="font-size:13px; color:var(--text-muted); text-align:center;" id="dashDesc">جميع السجلات تذهب مباشرة إلى ملف Google Sheets الخاص بك وتظهر هناك فوراً لكل موظف بجواله!</p>
         <button class="btn-admin" onclick="window.open('https://docs.google.com/spreadsheets', '_blank')" id="openExcelBtn">📂 فتح ملف الإكسل السحابي</button>
         <button class="btn-logout" style="background:#64748b; margin-top:15px;" onclick="logoutAdmin()" id="backBtn">🚪 عودة</button>
     </div>
 
 <script>
-    // ضع هنا رابط Web App الخاص بك بدقة
+    // ضع هنا رابط Web App الخاص بك بين القوسين أدناه:
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxouDR7d53yHHo3Lgq0uTkcfjnRJeG7zHQ7ECthHZ103C2cI4WhBLUcsWWevjCqCObqQ/exec";
 
     let currentLang = 'ar';
-    let isDark = true;
-
-    let deviceId = localStorage.getItem('tog_device_id');
-    if (!deviceId) {
-        deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
-        localStorage.setItem('tog_device_id', deviceId);
-    }
+    let isLightMode = false;
 
     function toggleTheme() {
-        isDark = !isDark;
-        document.body.classList.toggle('dark-mode', isDark);
-        document.getElementById('themeToggleBtn').innerText = isDark ? '☀️' : '🌙';
+        isLightMode = !isLightMode;
+        document.getElementById('htmlRoot').classList.toggle('light-mode', isLightMode);
     }
 
     function toggleLanguage() {
@@ -152,9 +122,9 @@
         root.setAttribute('lang', currentLang);
 
         if (currentLang === 'en') {
-            document.getElementById('langToggleBtn').innerText = 'AR';
-            document.getElementById('brandSub').innerText = 'Specialty Coffee & Roastery';
-            document.getElementById('syncStatus').innerText = '🛡 Cloud Synced & Device Locked';
+            document.getElementById('langToggleBtn').innerText = 'العربية';
+            document.getElementById('mainHeading').innerText = '☕ Smart Attendance';
+            document.getElementById('syncStatus').innerText = '🛡️ Cloud Synced & Device Locked';
             document.getElementById('employeeName').placeholder = 'Enter your full name';
             document.getElementById('btnInText').innerText = 'Check In';
             document.getElementById('btnOutText').innerText = 'Check Out';
@@ -163,13 +133,13 @@
             document.getElementById('adminPassword').placeholder = 'Password';
             document.getElementById('loginBtn').innerText = 'Login';
             document.getElementById('cancelBtn').innerText = 'Cancel';
-            document.getElementById('dashHeading').innerText = '📊 TOG - Cloud Dashboard';
+            document.getElementById('dashHeading').innerText = '📊 Cloud Dashboard';
             document.getElementById('dashDesc').innerText = 'All logs go directly to your Google Sheets instantly!';
             document.getElementById('openExcelBtn').innerText = '📂 Open Cloud Excel';
             document.getElementById('backBtn').innerText = '🚪 Back';
         } else {
-            document.getElementById('langToggleBtn').innerText = 'EN';
-            document.getElementById('brandSub').innerText = 'Specialty Coffee & Roastery';
+            document.getElementById('langToggleBtn').innerText = 'English';
+            document.getElementById('mainHeading').innerText = '☕ نظام الحضور الذكي';
             document.getElementById('syncStatus').innerText = '🛡️ مزمّن سحابياً مع الإدارة وبصمة الجهاز';
             document.getElementById('employeeName').placeholder = 'أدخل اسمك الثلاثي';
             document.getElementById('btnInText').innerText = 'تسجيل حضور';
@@ -179,7 +149,7 @@
             document.getElementById('adminPassword').placeholder = 'كلمة المرور';
             document.getElementById('loginBtn').innerText = 'دخول';
             document.getElementById('cancelBtn').innerText = 'إلغاء';
-            document.getElementById('dashHeading').innerText = '📊 لوحة التحكم السحابية - TOG';
+            document.getElementById('dashHeading').innerText = '📊 لوحة التحكم السحابية';
             document.getElementById('dashDesc').innerText = 'جميع السجلات تذهب مباشرة إلى ملف Google Sheets الخاص بك وتظهر هناك فوراً!';
             document.getElementById('openExcelBtn').innerText = '📂 فتح ملف الإكسل السحابي';
             document.getElementById('backBtn').innerText = '🚪 عودة';
@@ -223,31 +193,18 @@
             return;
         }
 
-        const todayStr = new Date().toDateString();
-        let lastRegDate = localStorage.getItem('tog_last_date');
-        let lastRegDevice = localStorage.getItem('tog_last_device');
-
-        if (lastRegDate === todayStr && lastRegDevice === deviceId) {
-            alert(currentLang === 'ar' ? "❌ لقد قمت بالتسجيل مسبقاً من هذا الجهاز اليوم!" : "❌ You have already checked in from this device today!");
+        let lastRegistered = localStorage.getItem('last_reg_name');
+        if(lastRegistered === name) {
+            alert(currentLang === 'ar' ? "لقد قمت بتسجيل الحضور مسبقاً من هذا الجهاز!" : "You have already checked in from this device!");
             return;
         }
 
-        // تنسيق التاريخ والوقت بدقة تامة (السنة/الشهر/اليوم - الساعة:الدقيقة:الثانية)
         const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-        
-        const formattedDateTime = `${year}/${month}/${day} - ${hours}:${minutes}:${seconds}`;
-
         const data = {
             name: name,
             type: type,
-            time: formattedDateTime,
-            status: type.includes('حضور') || type.includes('In') ? 'في الموعد' : 'انصراف',
+            time: now.toLocaleString('ar-SA'),
+            status: type === 'تسجيل حضور' || type === 'Check In' ? 'في الموعد' : 'انصراف',
             device: getMobileDeviceType(),
             points: type.includes('حضور') || type.includes('In') ? 1 : 0
         };
@@ -255,14 +212,14 @@
         fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         }).then(() => {
-            localStorage.setItem('tog_last_date', todayStr);
-            localStorage.setItem('tog_last_device', deviceId);
-            alert(currentLang === 'ar' ? `✅ تم ${type} بنجاح وفي الوقت المحدد!` : `✅ Registered successfully!`);
+            localStorage.setItem('last_reg_name', name);
+            alert(currentLang === 'ar' ? `✅ تم التسجيل بنجاح وسُجل في نظام الإدارة!` : `✅ Registered successfully!`);
             document.getElementById('employeeName').value = '';
         }).catch(error => {
-            alert(currentLang === 'ar' ? "حدث خطأ في الاتصال بالسحابة." : "Cloud connection error.");
+            alert(currentLang === 'ar' ? "حدث خطأ في الاتصال بالشبكة." : "Network connection error.");
         });
     }
 </script>
