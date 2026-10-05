@@ -6,7 +6,7 @@
     <title id="pageTitle">TOG | نظام الحضور الذكي</title>
     <style>
         :root {
-            --primary: #5c3a21; /* بنو قهوة فاخر مستوحى من شعار TOG */
+            --primary: #5c3a21;
             --primary-hover: #432917;
             --success: #10b981;
             --danger: #ef4444;
@@ -34,7 +34,6 @@
             margin: 0; padding: 16px; color: var(--text-color);
             min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
-        /* شريط علوي صغير وراقي للأيقونات */
         .top-header {
             width: 100%; max-width: 420px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 0 4px;
         }
@@ -51,13 +50,10 @@
             border: 1px solid var(--border-color); margin-bottom: 20px; backdrop-filter: blur(10px);
         }
         
-        /* تصميم الهوية البصرية TOG */
-        .brand-logo-container {
-            text-align: center; margin-bottom: 15px;
-        }
+        .brand-logo-container { text-align: center; margin-bottom: 15px; }
         .brand-title {
             font-family: 'Georgia', serif; font-size: 38px; font-weight: bold; color: var(--primary);
-            letter-spacing: 2px; margin: 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+            letter-spacing: 2px; margin: 0;
         }
         .dark-mode .brand-title { color: #d4bc9e; }
         .brand-subtitle {
@@ -87,16 +83,14 @@
         .hidden { display: none; }
     </style>
 </head>
-<body class="dark-mode"> <!-- الافتراضي وضع ليلي فاخر يبرز هوية TOG -->
+<body class="dark-mode">
 
-    <!-- شريط الأيقونات العلوي الصغير (أقصى اليمين وأقصى اليسار) -->
     <div class="top-header">
         <button class="icon-btn" id="langToggleBtn" onclick="toggleLanguage()" title="تغيير اللغة">EN</button>
         <button class="icon-btn" id="themeToggleBtn" onclick="toggleTheme()" title="الوضع الليلي والنهاري">☀️</button>
     </div>
 
     <div class="container" id="employeeView">
-        <!-- هوية بصرية TOG -->
         <div class="brand-logo-container">
             <h1 class="brand-title">TOG</h1>
             <div class="brand-subtitle" id="brandSub">Specialty Coffee & Roastery</div>
@@ -127,17 +121,24 @@
 
     <div class="container hidden" id="adminDashboardView" style="max-width: 500px;">
         <h3 style="color: var(--primary);" id="dashHeading">📊 لوحة التحكم السحابية - TOG</h3>
-        <p style="font-size:13px; color:var(--text-muted); text-align:center;" id="dashDesc">جميع السجلات تذهب مباشرة إلى ملف Google Sheets الخاص بك وتظهر هناك فوراً لكل موظف بجواله!</p>
+        <p style="font-size:13px; color:var(--text-muted); text-align:center;" id="dashDesc">جميع السجلات تذهب مباشرة إلى ملف Google Sheets الخاص بك وتظهر هناك فوراً!</p>
         <button class="btn-admin" onclick="window.open('https://docs.google.com/spreadsheets', '_blank')" id="openExcelBtn">📂 فتح ملف الإكسل السحابي</button>
         <button class="btn-logout" style="background:#64748b; margin-top:15px;" onclick="logoutAdmin()" id="backBtn">🚪 عودة</button>
     </div>
 
 <script>
-    // رابط Web App الخاص بك في جوجل
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxouDR7d53yHHo3Lgq0uTkcfjnRjEgJ7zHQ7ECthHZ1O3C2cI4WhBLUcsWWevjCqCObqQ/exec";
+    // ضع هنا رابط Web App الخاص بك بدقة
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxouDR7d53yHHo3Lgq0uTkcfjnRJeG7zHQ7ECthHZ103C2cI4WhBLUcsWWevjCqCObqQ/exec";
 
     let currentLang = 'ar';
     let isDark = true;
+
+    // توليد أو جلب بصمة الجهاز الفريدة لمنع التكرار
+    let deviceId = localStorage.getItem('tog_device_id');
+    if (!deviceId) {
+        deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
+        localStorage.setItem('tog_device_id', deviceId);
+    }
 
     function toggleTheme() {
         isDark = !isDark;
@@ -154,7 +155,7 @@
         if (currentLang === 'en') {
             document.getElementById('langToggleBtn').innerText = 'AR';
             document.getElementById('brandSub').innerText = 'Specialty Coffee & Roastery';
-            document.getElementById('syncStatus').innerText = '🛡️️ Cloud Synced & Device Locked';
+            document.getElementById('syncStatus').innerText = '🛡 Cloud Synced & Device Locked';
             document.getElementById('employeeName').placeholder = 'Enter your full name';
             document.getElementById('btnInText').innerText = 'Check In';
             document.getElementById('btnOutText').innerText = 'Check Out';
@@ -223,9 +224,13 @@
             return;
         }
 
-        let lastRegistered = localStorage.getItem('last_reg_name');
-        if(lastRegistered === name) {
-            alert(currentLang === 'ar' ? "لقد قمت بتسجيل الحضور مسبقاً من هذا الجهاز!" : "You have already checked in from this device!");
+        // فحص قفل الجهاز لمنع التكرار لهذا اليوم
+        const todayStr = new Date().toDateString();
+        let lastRegDate = localStorage.getItem('tog_last_date');
+        let lastRegDevice = localStorage.getItem('tog_last_device');
+
+        if (lastRegDate === todayStr && lastRegDevice === deviceId) {
+            alert(currentLang === 'ar' ? "❌ لقد قمت بالتسجيل مسبقاً من هذا الجهاز اليوم ولا يمكن التكرار!" : "❌ You have already checked in from this device today!");
             return;
         }
 
@@ -239,17 +244,18 @@
             points: type.includes('حضور') || type.includes('In') ? 1 : 0
         };
 
+        // استخدام طريقة إرسال مضمونة 100% لتصل البيانات للإكسل مباشرة
         fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         }).then(() => {
-            localStorage.setItem('last_reg_name', name);
-            alert(currentLang === 'ar' ? `✅ تم التسجيل بنجاح وسُجل في نظام TOG!` : `✅ Registered successfully in TOG system!`);
+            localStorage.setItem('tog_last_date', todayStr);
+            localStorage.setItem('tog_last_device', deviceId);
+            alert(currentLang === 'ar' ? `✅ تم ${type} بنجاح وسُجل في سحابة TOG!` : `✅ Registered successfully!`);
             document.getElementById('employeeName').value = '';
         }).catch(error => {
-            alert(currentLang === 'ar' ? "حدث خطأ في الاتصال بالشبكة." : "Network connection error.");
+            alert(currentLang === 'ar' ? "حدث خطأ في الاتصال بالسحابة." : "Cloud connection error.");
         });
     }
 </script>
