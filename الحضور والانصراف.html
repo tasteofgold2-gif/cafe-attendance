@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tog   | Café & Roastery</title>
+    <style>
+        :root {
+            --primary: #f59e0b;
+            --primary-hover: #d97706;
+            --success: #10b981;
+            --success-hover: #059669;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            --card-bg: rgba(15, 23, 42, 0.75);
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: rgba(245, 158, 11, 0.3);
+            --input-bg: rgba(30, 41, 59, 0.8);
+            --table-header: rgba(30, 41, 59, 0.95);
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+        }
+
+        [data-theme="light"] {
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+            --border-color: rgba(217, 119, 6, 0.25);
+            --input-bg: #f8fafc;
+            --table-header: #f1f5f9;
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #090d16 0%, #172033 50%, #1e1b18 100%);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+            transition: background 0.4s ease;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* خلفية حبوب البن وأكواب القهوة المتحركة */
+        .coffee-beans-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .bean {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            animation: floatBean 15s linear infinite;
+            bottom: -100px;
+            opacity: 0.7;
+        }
+
+        .bean:nth-child(1) { left: 10%; animation-duration: 12s; animation-delay: 0s; font-size: 28px; }
+        .bean:nth-child(2) { left: 25%; animation-duration: 18s; animation-delay: 3s; font-size: 20px; }
+        .bean:nth-child(3) { left: 40%; animation-duration: 14s; animation-delay: 1s; font-size: 32px; }
+        .bean:nth-child(4) { left: 55%; animation-duration: 20s; animation-delay: 4s; font-size: 22px; }
+        .bean:nth-child(5) { left: 70%; animation-duration: 16s; animation-delay: 2s; font-size: 30px; }
+        .bean:nth-child(6) { left: 85%; animation-duration: 13s; animation-delay: 5s; font-size: 25px; }
+
+        @keyframes floatBean {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(0.8);
+                opacity: 0;
+            }
+            20% { opacity: 0.9; }
+            80% { opacity: 0.9; }
+            100% {
+                transform: translateY(-1100px) rotate(720deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .top-btn {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+            width: auto;
+            margin: 0;
+        }
+
+        .top-btn:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 520px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 35px;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        h2, h3 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .input-group {
+            position: relative;
+            margin: 16px 0;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px 18px;
+            border: 2px solid var(--border-color);
+            border-radius: 14px;
+            box-sizing: border-box;
+            font-size: 15px;
+            outline: none;
+            background: var(--input-bg);
+            color: var(--text-color);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            margin: 10px 0;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        button:active { transform: scale(0.97); }
+
+        .btn-in { background-color: var(--success); color: white; }
+        .btn-in:hover { background-color: var(--success-hover); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4); }
+
+        .btn-out { background-color: var(--danger); color: white; }
+        .btn-out:hover { background-color: var(--danger-hover); box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4); }
+
+        .btn-admin { background-color: var(--primary); color: white; }
+        .btn-admin:hover { background-color: var(--primary-hover); box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4); }
+
+        .btn-logout { background-color: #64748b; color: white; }
+        .btn-logout:hover { background-color: #475569; }
+
+        .status {
+            text-align: center;
+            font-weight: 600;
+            margin: 15px 0;
+            padding: 12px;
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border-radius: 12px;
+            font-size: 13px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 20px;
+            font-size: 13px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        th, td {
+            padding: 12px 14px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+        }
+
+        th:last-child, td:last-child { border-right: none; }
+        tr:last-child td { border-bottom: none; }
+
+        th { 
+            background: var(--table-header); 
+            font-weight: 700; 
+            color: var(--text-color);
+        }
+
+        .hidden { display: none; }
+
+        .admin-login-box {
+            background: var(--input-bg);
+            padding: 20px;
+            border-radius: 16px;
+            border: 2px dashed var(--border-color);
+            margin-top: 25px;
+        }
+    </style>
+</head>
+<body data-theme="dark">
+
+    <!-- خلفية حبوب البن وأكواب القهوة المتحركة -->
+    <div class="coffee-beans-bg">
+        <div class="bean">☕</div>
+        <div class="bean">🫘</div>
+        <div class="bean">☕</div>
+        <div class="bean">🫘</div>
+        <div class="bean">☕</div>
+        <div class="bean">🫘</div>
+    </div>
+
+    <!-- شريط التحكم العلوي -->
+    <div class="top-bar">
+        <button class="top-btn" onclick="toggleLanguage()" id="langBtn">🌐 English</button>
+        <button class="top-btn" onclick="toggleTheme()" id="themeBtn">☀️ نهار</button>
+    </div>
+
+    <!-- واجهة الموظفين الأساسية -->
+    <div class="container" id="employeeView">
+        <h2 id="tTitle">☕ نظام الحضور والإنصراف</h2>
+        <div id="locationStatus" class="status">🛡️ حماية الموقع الجغرافي وبصمة الجهاز نشطة</div>
+        
+        <div class="input-group">
+            <input type="text" id="employeeName" placeholder="أدخل اسمك الكامل المعتمد">
+        </div>
+
+        <button class="btn-in" onclick="registerAttendance('تسجيل حضور', 'Attendance')">
+            ✨ <span id="tBtnIn">تسجيل حضور</span>
+        </button>
+        <button class="btn-out" onclick="registerAttendance('تسجيل انصراف', 'Departure')">
+            🚪 <span id="tBtnOut">تسجيل انصراف</span>
+        </button>
+        
+        <div class="admin-login-box">
+            <p style="margin:0 0 12px 0; font-size:13px; text-align:center; font-weight:700; color:var(--text-muted);" id="tAdminTitle">بوابة الإدارة:</p>
+            <button class="btn-admin" onclick="showAdminLogin()">
+                🔐 <span id="tBtnAdmin">دخول لوحة المدير</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- نافذة تسجيل دخول المدير -->
+    <div class="container hidden" id="adminLoginView">
+        <h3 id="tAdminLoginTitle">تسجيل دخول المدير</h3>
+        <div class="input-group">
+            <input type="password" id="adminPassword" placeholder="كلمة المرور المشفرة">
+        </div>
+        <button class="btn-admin" onclick="verifyAdmin()">تحقق والدخول</button>
+        <button class="btn-logout" onclick="hideAdminLogin()">إلغاء</button>
+    </div>
+
+    <!-- لوحة التحكم الخاصة بالمدير -->
+    <div class="container hidden" id="adminDashboardView" style="max-width: 780px;">
+        <h3 style="color: var(--primary);">📊 لوحة التحكم والإدارة</h3>
+        
+        <div class="input-group">
+            <label style="font-weight:700; font-size:13px; color:var(--text-muted); display:block; margin-bottom:6px;">نصف القطر المسموح (بالمتر):</label>
+            <input type="number" id="radiusMeters" value="100">
+        </div>
+        
+        <button class="btn-admin" onclick="setWorkLocationCurrent()">📍 تحديث إحداثيات موقع العمل الحالي</button>
+        <button class="btn-in" style="background-color: #0284c7;" onclick="exportCSV()">📥 تصدير السجلات (CSV)</button>
+        <button class="btn-out" onclick="resetDeviceBindings()">🔄 إعادة تعيين قيود الأجهزة</button>
+        <button class="btn-logout" onclick="logoutAdmin()">🚪 تسجيل خروج الإدارة</button>
+        
+        <h3 style="margin-top: 30px; font-size: 16px;">سجلات الحضور والنقاط التفصيلية</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>الموظف</th>
+                    <th>النوع</th>
+                    <th>الوقت</th>
+                    <th>الحالة</th>
+                    <th>النقاط</th>
+                </tr>
+            </thead>
+            <tbody id="logsTableBody">
+                <tr><td colspan="5">لا توجد سجلات مسجلة حتى الآن</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+<script>
+    let currentLang = 'ar';
+    let currentTheme = 'dark';
+
+    function toggleLanguage() {
+        currentLang = currentLang === 'ar' ? 'en' : 'ar';
+        const isAr = currentLang === 'ar';
+        document.documentElement.setAttribute('dir', isAr ? 'rtl' : 'ltr');
+        document.getElementById('langBtn').innerText = isAr ? '🌐 English' : '🌐 عربي';
+        document.getElementById('tTitle').innerText = isAr ? '☕ نظام الحضور والإنصراف' : '☕ Café Attendance';
+        document.getElementById('tBtnIn').innerText = isAr ? 'تسجيل حضور' : 'Check In';
+        document.getElementById('tBtnOut').innerText = isAr ? 'تسجيل انصراف' : 'Check Out';
+        document.getElementById('tAdminTitle').innerText = isAr ? 'بوابة الإدارة:' : 'Admin Portal:';
+        document.getElementById('tBtnAdmin').innerText = isAr ? 'دخول لوحة المدير' : 'Admin Login';
+    }
+
+    function toggleTheme() {
+        currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+        document.body.setAttribute('data-theme', currentTheme);
+        document.getElementById('themeBtn').innerText = currentTheme === 'light' ? '🌙 دارك' : '☀️ نهار';
+    }
+
+    let myDeviceId = localStorage.getItem('myDeviceId');
+    if (!myDeviceId) {
+        myDeviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+        localStorage.setItem('myDeviceId', myDeviceId);
+    }
+
+    let workLocation = JSON.parse(localStorage.getItem('workLocation')) || { lat: 24.7136, lon: 46.6753 };
+    let attendanceLogs = JSON.parse(localStorage.getItem('attendanceLogs')) || [];
+    let employeeDevices = JSON.parse(localStorage.getItem('employeeDevices')) || {};
+
+    if (!localStorage.getItem('workLocation')) {
+        localStorage.setItem('workLocation', JSON.stringify(workLocation));
+    }
+
+    updateLogsTable();
+
+    function showAdminLogin() {
+        document.getElementById('employeeView').classList.add('hidden');
+        document.getElementById('adminLoginView').classList.remove('hidden');
+    }
+
+    function hideAdminLogin() {
+        document.getElementById('adminLoginView').classList.add('hidden');
+        document.getElementById('employeeView').classList.remove('hidden');
+    }
+
+    function verifyAdmin() {
+        const pass = document.getElementById('adminPassword').value;
+        if (pass === "safa24ms") {
+            document.getElementById('adminLoginView').classList.add('hidden');
+            document.getElementById('adminDashboardView').classList.remove('hidden');
+            document.getElementById('adminPassword').value = "";
+        } else {
+            alert(currentLang === 'ar' ? "كلمة المرور غير صحيحة!" : "Incorrect password!");
+        }
+    }
+
+    function logoutAdmin() {
+        document.getElementById('adminDashboardView').classList.add('hidden');
+        document.getElementById('employeeView').classList.remove('hidden');
+    }
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371e3;
+        const φ1 = lat1 * Math.PI/180;
+        const φ2 = lat2 * Math.PI/180;
+        const Δφ = (lat2-lat1) * Math.PI/180;
+        const Δλ = (lon2-lon1) * Math.PI/180;
+        const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2) * Math.sin(Δλ/2);
+        return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+    }
+
+    function setWorkLocationCurrent() {
+        navigator.geolocation.getCurrentPosition(position => {
+            workLocation = { lat: position.coords.latitude, lon: position.coords.longitude };
+            localStorage.setItem('workLocation', JSON.stringify(workLocation));
+            alert("تم تحديث موقع العمل بنجاح!");
+        }, () => { alert("فشل تحديد الموقع."); }, { enableHighAccuracy: true });
+    }
+
+    function registerAttendance(typeAr, typeEn) {
+        let name = document.getElementById('employeeName').value.trim();
+        const allowedRadius = parseFloat(document.getElementById('radiusMeters').value) || 100;
+
+        if (!name) {
+            alert(currentLang === 'ar' ? "الرجاء إدخال اسمك الكامل أولاً!" : "Please enter your full name first!");
+            return;
+        }
+
+        if (employeeDevices[name]) {
+            if (employeeDevices[name] !== myDeviceId) {
+                alert(currentLang === 'ar' ? `❌ مرفوض أمنياً!\nحساب "${name}" مرتبط بهاتف آخر.` : `❌ Security Block!\nAccount "${name}" is linked to another device.`);
+                return;
+            }
+        } else {
+            employeeDevices[name] = myDeviceId;
+            localStorage.setItem('employeeDevices', JSON.stringify(employeeDevices));
+        }
+
+        navigator.geolocation.getCurrentPosition(position => {
+            const distance = calculateDistance(position.coords.latitude, position.coords.longitude, workLocation.lat, workLocation.lon);
+
+            if (distance > allowedRadius) {
+                alert(currentLang === 'ar' ? `❌ أنت خارج نطاق العمل (${Math.round(distance)}م)` : `❌ You are out of range (${Math.round(distance)}m)`);
+                return;
+            }
+
+            const now = new Date();
+            let statusColor = "var(--success)";
+            let statusText = "على الموعد (On Time)";
+            let earnedPoints = 0;
+
+            if (typeAr === 'تسجيل حضور') {
+                const hours = now.getHours();
+                const minutes = now.getMinutes();
+                const totalMinutes = hours * 60 + minutes;
+                const targetMinutes = 16 * 60; // 4:00 PM
+
+                if (totalMinutes <= targetMinutes + 10) { 
+                    statusColor = "var(--success)";
+                    statusText = "🟢 حضر في الموعد (On Time)";
+                    if (totalMinutes <= targetMinutes) {
+                        earnedPoints = 1;
+                    }
+                } else {
+                    statusColor = "var(--danger)";
+                    statusText = "🔴 متأخر (Late)";
+                    earnedPoints = 0;
+                }
+            } else {
+                statusText = "انصراف (Departure)";
+            }
+
+            const newLog = {
+                name: name,
+                type: currentLang === 'ar' ? typeAr : typeEn,
+                time: now.toLocaleString('ar-SA'),
+                status: statusText,
+                color: statusColor,
+                points: earnedPoints,
+                distance: Math.round(distance) + " م"
+            };
+
+            attendanceLogs.unshift(newLog);
+            localStorage.setItem('attendanceLogs', JSON.stringify(attendanceLogs));
+            updateLogsTable();
+            alert(currentLang === 'ar' ? `✅ تم ${typeAr} بنجاح! ${earnedPoints > 0 ? 'حصلت على نقطة تميز ⭐' : ''}` : `✅ Success!`);
+            document.getElementById('employeeName').value = '';
+
+        }, () => { alert("يرجى تفعيل الـ GPS."); }, { enableHighAccuracy: true });
+    }
+
+    function resetDeviceBindings() {
+        if (confirm("هل تريد مسح ربط الأجهزة للموظفين؟")) {
+            localStorage.removeItem('employeeDevices');
+            employeeDevices = {};
+            alert("تمت إعادة التعيين.");
+        }
+    }
+
+    function updateLogsTable() {
+        const tbody = document.getElementById('logsTableBody');
+        if (attendanceLogs.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5">لا توجد سجلات مسجلة حتى الآن</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = "";
+        attendanceLogs.forEach(log => {
+            tbody.innerHTML += `
+                <tr>
+                    <td style="font-weight:600;">${log.name}</td>
+                    <td>${log.type}</td>
+                    <td>${log.time}</td>
+                    <td style="color:${log.color}; font-weight:700;">${log.status}</td>
+                    <td style="font-weight:700; color:var(--primary);">${log.points || 0} ⭐</td>
+                </tr>
+            `;
+        });
+    }
+
+    function exportCSV() {
+        if (attendanceLogs.length === 0) return alert("لا توجد سجلات للتصدير!");
+        let csvContent = "\uFEFFالموظف,النوع,الوقت,الحالة,النقاط\n";
+        attendanceLogs.forEach(row => {
+            csvContent += `${row.name},${row.type},${row.time},${row.status},${row.points}\n`;
+        });
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'attendance_report.csv';
+        a.click();
+    }
+</script>
+
+</body>
+</html>
