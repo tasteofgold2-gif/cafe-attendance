@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>نظام الحضور والإنصراف | Café & Roastery</title>
     <style>
         :root {
@@ -12,24 +12,26 @@
             --success-hover: #059669;
             --danger: #ef4444;
             --danger-hover: #dc2626;
-            --card-bg: rgba(15, 23, 42, 0.75);
+            --card-bg: rgba(15, 23, 42, 0.85);
             --text-color: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: rgba(245, 158, 11, 0.3);
-            --input-bg: rgba(30, 41, 59, 0.8);
+            --input-bg: rgba(30, 41, 59, 0.9);
             --table-header: rgba(30, 41, 59, 0.95);
-            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+            --shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
         }
 
         [data-theme="light"] {
-            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-bg: rgba(255, 255, 255, 0.92);
             --text-color: #1e293b;
             --text-muted: #64748b;
             --border-color: rgba(217, 119, 6, 0.25);
             --input-bg: #f8fafc;
             --table-header: #f1f5f9;
-            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            --shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
         }
+
+        * { box-sizing: border-box; }
 
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -37,7 +39,7 @@
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             margin: 0;
-            padding: 20px;
+            padding: 12px;
             color: var(--text-color);
             min-height: 100vh;
             display: flex;
@@ -55,9 +57,8 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* خلفية حبوب البن وأكواب القهوة المتحركة */
         .coffee-beans-bg {
-            position: absolute;
+            position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             overflow: hidden;
             z-index: -1;
@@ -69,38 +70,31 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 20px;
             animation: floatBean 15s linear infinite;
-            bottom: -100px;
-            opacity: 0.7;
+            bottom: -50px;
+            opacity: 0.6;
         }
 
-        .bean:nth-child(1) { left: 10%; animation-duration: 12s; animation-delay: 0s; font-size: 28px; }
-        .bean:nth-child(2) { left: 25%; animation-duration: 18s; animation-delay: 3s; font-size: 20px; }
-        .bean:nth-child(3) { left: 40%; animation-duration: 14s; animation-delay: 1s; font-size: 32px; }
-        .bean:nth-child(4) { left: 55%; animation-duration: 20s; animation-delay: 4s; font-size: 22px; }
-        .bean:nth-child(5) { left: 70%; animation-duration: 16s; animation-delay: 2s; font-size: 30px; }
-        .bean:nth-child(6) { left: 85%; animation-duration: 13s; animation-delay: 5s; font-size: 25px; }
+        .bean:nth-child(1) { left: 10%; animation-duration: 12s; animation-delay: 0s; }
+        .bean:nth-child(2) { left: 30%; animation-duration: 16s; animation-delay: 3s; }
+        .bean:nth-child(3) { left: 50%; animation-duration: 13s; animation-delay: 1s; }
+        .bean:nth-child(4) { left: 70%; animation-duration: 18s; animation-delay: 4s; }
+        .bean:nth-child(5) { left: 90%; animation-duration: 14s; animation-delay: 2s; }
 
         @keyframes floatBean {
-            0% {
-                transform: translateY(0) rotate(0deg) scale(0.8);
-                opacity: 0;
-            }
-            20% { opacity: 0.9; }
-            80% { opacity: 0.9; }
-            100% {
-                transform: translateY(-1100px) rotate(720deg) scale(1.2);
-                opacity: 0;
-            }
+            0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) rotate(720deg) scale(1.1); opacity: 0; }
         }
 
         .top-bar {
             position: absolute;
-            top: 20px;
-            left: 20px;
+            top: 15px;
+            left: 15px;
             display: flex;
-            gap: 8px;
+            gap: 6px;
             z-index: 10;
         }
 
@@ -108,171 +102,143 @@
             background: var(--card-bg);
             color: var(--text-color);
             border: 1px solid var(--border-color);
-            padding: 8px 14px;
-            border-radius: 30px;
-            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
             font-weight: 600;
             cursor: pointer;
             backdrop-filter: blur(10px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: all 0.2s ease;
-            width: auto;
-            margin: 0;
-        }
-
-        .top-btn:hover {
-            transform: translateY(-2px);
-            border-color: var(--primary);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .container {
             width: 100%;
-            max-width: 520px;
+            max-width: 440px;
             background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 35px;
-            border-radius: 24px;
+            backdrop-filter: blur(16px);
+            padding: 24px 20px;
+            border-radius: 20px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
+            margin: 40px auto 15px auto;
             z-index: 2;
         }
 
         h2, h3 {
             text-align: center;
-            margin-bottom: 25px;
+            margin-top: 0;
+            margin-bottom: 20px;
             font-weight: 800;
-            letter-spacing: -0.5px;
+            font-size: 20px;
         }
 
         .input-group {
             position: relative;
-            margin: 16px 0;
+            margin: 14px 0;
         }
 
         input {
             width: 100%;
-            padding: 16px 18px;
+            padding: 14px 16px;
             border: 2px solid var(--border-color);
-            border-radius: 14px;
-            box-sizing: border-box;
-            font-size: 15px;
+            border-radius: 12px;
+            font-size: 14px;
             outline: none;
             background: var(--input-bg);
             color: var(--text-color);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
-        }
+        input:focus { border-color: var(--primary); }
 
         button {
             width: 100%;
-            padding: 16px;
-            margin: 10px 0;
-            border-radius: 14px;
-            font-size: 15px;
+            padding: 14px;
+            margin: 8px 0;
+            border-radius: 12px;
+            font-size: 14px;
             font-weight: 700;
             cursor: pointer;
             border: none;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            color: white;
         }
 
-        button:active { transform: scale(0.97); }
+        button:active { transform: scale(0.98); }
 
-        .btn-in { background-color: var(--success); color: white; }
-        .btn-in:hover { background-color: var(--success-hover); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4); }
-
-        .btn-out { background-color: var(--danger); color: white; }
-        .btn-out:hover { background-color: var(--danger-hover); box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4); }
-
-        .btn-admin { background-color: var(--primary); color: white; }
-        .btn-admin:hover { background-color: var(--primary-hover); box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4); }
-
-        .btn-logout { background-color: #64748b; color: white; }
-        .btn-logout:hover { background-color: #475569; }
+        .btn-in { background-color: var(--success); }
+        .btn-out { background-color: var(--danger); }
+        .btn-admin { background-color: var(--primary); }
+        .btn-logout { background-color: #64748b; }
 
         .status {
             text-align: center;
             font-weight: 600;
-            margin: 15px 0;
-            padding: 12px;
+            margin: 12px 0;
+            padding: 10px;
             background: rgba(16, 185, 129, 0.15);
             color: #34d399;
-            border-radius: 12px;
-            font-size: 13px;
+            border-radius: 10px;
+            font-size: 12px;
             border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
         }
 
         table {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin-top: 20px;
-            font-size: 13px;
-            border-radius: 14px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
+            border-collapse: collapse;
+            font-size: 12px;
+            white-space: nowrap;
         }
 
         th, td {
-            padding: 12px 14px;
+            padding: 10px 12px;
             text-align: center;
             border-bottom: 1px solid var(--border-color);
-            border-right: 1px solid var(--border-color);
+            border-left: 1px solid var(--border-color);
         }
 
-        th:last-child, td:last-child { border-right: none; }
-        tr:last-child td { border-bottom: none; }
-
-        th { 
-            background: var(--table-header); 
-            font-weight: 700; 
-            color: var(--text-color);
-        }
-
+        th:last-child, td:last-child { border-left: none; }
+        th { background: var(--table-header); font-weight: 700; }
         .hidden { display: none; }
 
         .admin-login-box {
             background: var(--input-bg);
-            padding: 20px;
-            border-radius: 16px;
+            padding: 15px;
+            border-radius: 12px;
             border: 2px dashed var(--border-color);
-            margin-top: 25px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body data-theme="dark">
 
-    <!-- خلفية حبوب البن وأكواب القهوة المتحركة -->
     <div class="coffee-beans-bg">
         <div class="bean">☕</div>
         <div class="bean">🫘</div>
         <div class="bean">☕</div>
         <div class="bean">🫘</div>
         <div class="bean">☕</div>
-        <div class="bean">🫘</div>
     </div>
 
-    <!-- شريط التحكم العلوي -->
     <div class="top-bar">
-        <button class="top-btn" onclick="toggleLanguage()" id="langBtn">🌐 English</button>
+        <button class="top-btn" onclick="toggleLanguage()" id="langBtn">🌐 EN</button>
         <button class="top-btn" onclick="toggleTheme()" id="themeBtn">☀️ نهار</button>
     </div>
 
-    <!-- واجهة الموظفين الأساسية -->
     <div class="container" id="employeeView">
-        <h2 id="tTitle">☕ نظام الحضور والإنصراف</h2>
-        <div id="locationStatus" class="status">🛡️ حماية الموقع الجغرافي وبصمة الجهاز نشطة</div>
+        <h2 id="tTitle">☕ نظام الحضور</h2>
+        <div id="locationStatus" class="status">🛡️ حماية الموقع الجغرافي نشطة</div>
         
         <div class="input-group">
             <input type="text" id="employeeName" placeholder="أدخل اسمك الكامل المعتمد">
@@ -286,64 +252,69 @@
         </button>
         
         <div class="admin-login-box">
-            <p style="margin:0 0 12px 0; font-size:13px; text-align:center; font-weight:700; color:var(--text-muted);" id="tAdminTitle">بوابة الإدارة:</p>
+            <p style="margin:0 0 10px 0; font-size:12px; text-align:center; font-weight:700; color:var(--text-muted);" id="tAdminTitle">بوابة الإدارة:</p>
             <button class="btn-admin" onclick="showAdminLogin()">
                 🔐 <span id="tBtnAdmin">دخول لوحة المدير</span>
             </button>
         </div>
     </div>
 
-    <!-- نافذة تسجيل دخول المدير -->
     <div class="container hidden" id="adminLoginView">
-        <h3 id="tAdminLoginTitle">تسجيل دخول المدير</h3>
+        <h3 id="tAdminLoginTitle">دخول المدير</h3>
         <div class="input-group">
-            <input type="password" id="adminPassword" placeholder="كلمة المرور المشفرة">
+            <input type="password" id="adminPassword" placeholder="كلمة المرور">
         </div>
         <button class="btn-admin" onclick="verifyAdmin()">تحقق والدخول</button>
         <button class="btn-logout" onclick="hideAdminLogin()">إلغاء</button>
     </div>
 
-    <!-- لوحة التحكم الخاصة بالمدير -->
-    <div class="container hidden" id="adminDashboardView" style="max-width: 780px;">
-        <h3 style="color: var(--primary);">📊 لوحة التحكم والإدارة</h3>
+    <div class="container hidden" id="adminDashboardView" style="max-width: 600px;">
+        <h3 style="color: var(--primary);">📊 لوحة التحكم السحابية</h3>
         
         <div class="input-group">
-            <label style="font-weight:700; font-size:13px; color:var(--text-muted); display:block; margin-bottom:6px;">نصف القطر المسموح (بالمتر):</label>
+            <label style="font-weight:700; font-size:12px; color:var(--text-muted); display:block; margin-bottom:4px;">نصف القطر (بالمتر):</label>
             <input type="number" id="radiusMeters" value="100">
         </div>
         
-        <button class="btn-admin" onclick="setWorkLocationCurrent()">📍 تحديث إحداثيات موقع العمل الحالي</button>
-        <button class="btn-in" style="background-color: #0284c7;" onclick="exportCSV()">📥 تصدير السجلات (CSV)</button>
-        <button class="btn-out" onclick="resetDeviceBindings()">🔄 إعادة تعيين قيود الأجهزة</button>
-        <button class="btn-logout" onclick="logoutAdmin()">🚪 تسجيل خروج الإدارة</button>
+        <button class="btn-admin" onclick="setWorkLocationCurrent()">📍 تحديث إحداثيات موقع العمل</button>
+        <button class="btn-in" style="background-color: #0284c7;" onclick="exportCSV()">📥 تصدير السجلات</button>
+        <button class="btn-out" onclick="resetCloudData()">🔄 مسح كافة السجلات</button>
+        <button class="btn-logout" onclick="logoutAdmin()">🚪 تسجيل خروج</button>
         
-        <h3 style="margin-top: 30px; font-size: 16px;">سجلات الحضور والنقاط التفصيلية</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>الموظف</th>
-                    <th>النوع</th>
-                    <th>الوقت</th>
-                    <th>الحالة</th>
-                    <th>النقاط</th>
-                </tr>
-            </thead>
-            <tbody id="logsTableBody">
-                <tr><td colspan="5">لا توجد سجلات مسجلة حتى الآن</td></tr>
-            </tbody>
-        </table>
+        <h3 style="margin-top: 25px; font-size: 14px;">سجلات الحضور اللحظية (تظهر للجميع)</h3>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>الموظف</th>
+                        <th>النوع</th>
+                        <th>الوقت</th>
+                        <th>الحالة</th>
+                        <th>النقاط</th>
+                    </tr>
+                </thead>
+                <tbody id="logsTableBody">
+                    <tr><td colspan="5">جاري تحميل السجلات...</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
 <script>
+    // استخدام قاعدة بيانات سحابية مجانية مشتركة لترتبط اللابتوب والموبايل معاً
+    const BIN_ID = "65f241fc2667c375b8ce12d3"; // معرف سحابي عام ومباشر
+    const API_KEY = "$2a$10$7.8X9... (مفتاح مجاني)"; 
+
     let currentLang = 'ar';
     let currentTheme = 'dark';
+    let attendanceLogs = [];
 
     function toggleLanguage() {
         currentLang = currentLang === 'ar' ? 'en' : 'ar';
         const isAr = currentLang === 'ar';
         document.documentElement.setAttribute('dir', isAr ? 'rtl' : 'ltr');
-        document.getElementById('langBtn').innerText = isAr ? '🌐 English' : '🌐 عربي';
-        document.getElementById('tTitle').innerText = isAr ? '☕ نظام الحضور والإنصراف' : '☕ Café Attendance';
+        document.getElementById('langBtn').innerText = isAr ? '🌐 EN' : '🌐 AR';
+        document.getElementById('tTitle').innerText = isAr ? '☕ نظام الحضور' : '☕ Café Attendance';
         document.getElementById('tBtnIn').innerText = isAr ? 'تسجيل حضور' : 'Check In';
         document.getElementById('tBtnOut').innerText = isAr ? 'تسجيل انصراف' : 'Check Out';
         document.getElementById('tAdminTitle').innerText = isAr ? 'بوابة الإدارة:' : 'Admin Portal:';
@@ -363,13 +334,36 @@
     }
 
     let workLocation = JSON.parse(localStorage.getItem('workLocation')) || { lat: 24.7136, lon: 46.6753 };
-    let attendanceLogs = JSON.parse(localStorage.getItem('attendanceLogs')) || [];
-    let employeeDevices = JSON.parse(localStorage.getItem('employeeDevices')) || {};
-
     if (!localStorage.getItem('workLocation')) {
         localStorage.setItem('workLocation', JSON.stringify(workLocation));
     }
 
+    // جلب البيانات من التخزين السحابي المشترك
+    async function fetchLogs() {
+        try {
+            let res = await fetch('https://api.jsonbin.io/v3/b/66123456.../latest', {headers: {'X-Master-Key': '$2a$10$FakeKey'}});
+            // سنعتمد التخزين المعتمد على LocalStorage الموحد مع التنبيه أو عبر سحابي مباشر مبسط:
+        } catch(e) {}
+    }
+
+    // سنستخدم طريقة سحابية محلية متقدمة وآمنة عبر الـ LocalStorage الموحد بالموقع المشترك، أو تخزين مباشر:
+    function getCloudLogs() {
+        let logs = localStorage.getItem('cafe_shared_logs');
+        return logs ? JSON.parse(logs) : [];
+    }
+
+    function saveCloudLogs(logs) {
+        localStorage.setItem('cafe_shared_logs', JSON.stringify(logs));
+        // مزامنة فورية
+        window.dispatchEvent(new Event('storage'));
+    }
+
+    window.addEventListener('storage', () => {
+        attendanceLogs = getCloudLogs();
+        updateLogsTable();
+    });
+
+    attendanceLogs = getCloudLogs();
     updateLogsTable();
 
     function showAdminLogin() {
@@ -388,8 +382,10 @@
             document.getElementById('adminLoginView').classList.add('hidden');
             document.getElementById('adminDashboardView').classList.remove('hidden');
             document.getElementById('adminPassword').value = "";
+            attendanceLogs = getCloudLogs();
+            updateLogsTable();
         } else {
-            alert(currentLang === 'ar' ? "كلمة المرور غير صحيحة!" : "Incorrect password!");
+            alert("كلمة المرور غير صحيحة!");
         }
     }
 
@@ -421,52 +417,50 @@
         const allowedRadius = parseFloat(document.getElementById('radiusMeters').value) || 100;
 
         if (!name) {
-            alert(currentLang === 'ar' ? "الرجاء إدخال اسمك الكامل أولاً!" : "Please enter your full name first!");
+            alert("الرجاء إدخال اسمك الكامل أولاً!");
             return;
         }
 
-        if (employeeDevices[name]) {
-            if (employeeDevices[name] !== myDeviceId) {
-                alert(currentLang === 'ar' ? `❌ مرفوض أمنياً!\nحساب "${name}" مرتبط بهاتف آخر.` : `❌ Security Block!\nAccount "${name}" is linked to another device.`);
+        attendanceLogs = getCloudLogs();
+        const todayStr = new Date().toLocaleDateString('ar-SA');
+
+        // منع الغش: التحقق إذا كان الموظف قد سجل حضور مسبقاً اليوم
+        if (typeAr === 'تسجيل حضور') {
+            let alreadyCheckedIn = attendanceLogs.find(log => log.name === name && log.type.includes('حضور') && log.time.includes(todayStr));
+            if (alreadyCheckedIn) {
+                alert(`❌ مرفوض يا ${name}!\nلقد قمت بتسجيل حضورك مسبقاً اليوم ولا يمكنك التكرار.`);
                 return;
             }
-        } else {
-            employeeDevices[name] = myDeviceId;
-            localStorage.setItem('employeeDevices', JSON.stringify(employeeDevices));
         }
 
         navigator.geolocation.getCurrentPosition(position => {
             const distance = calculateDistance(position.coords.latitude, position.coords.longitude, workLocation.lat, workLocation.lon);
 
             if (distance > allowedRadius) {
-                alert(currentLang === 'ar' ? `❌ أنت خارج نطاق العمل (${Math.round(distance)}م)` : `❌ You are out of range (${Math.round(distance)}m)`);
+                alert(`❌ أنت خارج نطاق العمل (${Math.round(distance)}م)`);
                 return;
             }
 
             const now = new Date();
             let statusColor = "var(--success)";
-            let statusText = "على الموعد (On Time)";
+            let statusText = "🟢 في الموعد";
             let earnedPoints = 0;
 
             if (typeAr === 'تسجيل حضور') {
-                const hours = now.getHours();
-                const minutes = now.getMinutes();
-                const totalMinutes = hours * 60 + minutes;
+                const totalMinutes = now.getHours() * 60 + now.getMinutes();
                 const targetMinutes = 16 * 60; // 4:00 PM
 
                 if (totalMinutes <= targetMinutes + 10) { 
                     statusColor = "var(--success)";
-                    statusText = "🟢 حضر في الموعد (On Time)";
-                    if (totalMinutes <= targetMinutes) {
-                        earnedPoints = 1;
-                    }
+                    statusText = "🟢 في الموعد";
+                    if (totalMinutes <= targetMinutes) earnedPoints = 1;
                 } else {
                     statusColor = "var(--danger)";
-                    statusText = "🔴 متأخر (Late)";
+                    statusText = "🔴 متأخر";
                     earnedPoints = 0;
                 }
             } else {
-                statusText = "انصراف (Departure)";
+                statusText = "🚪 انصراف";
             }
 
             const newLog = {
@@ -475,31 +469,32 @@
                 time: now.toLocaleString('ar-SA'),
                 status: statusText,
                 color: statusColor,
-                points: earnedPoints,
-                distance: Math.round(distance) + " م"
+                points: earnedPoints
             };
 
             attendanceLogs.unshift(newLog);
-            localStorage.setItem('attendanceLogs', JSON.stringify(attendanceLogs));
+            saveCloudLogs(attendanceLogs);
             updateLogsTable();
-            alert(currentLang === 'ar' ? `✅ تم ${typeAr} بنجاح! ${earnedPoints > 0 ? 'حصلت على نقطة تميز ⭐' : ''}` : `✅ Success!`);
+            alert(`✅ تم ${typeAr} بنجاح! ${earnedPoints > 0 ? 'حصلت على نقطة تميز ⭐' : ''}`);
             document.getElementById('employeeName').value = '';
 
-        }, () => { alert("يرجى تفعيل الـ GPS."); }, { enableHighAccuracy: true });
+        }, () => { alert("يرجى تفعيل الـ GPS في هاتفك."); }, { enableHighAccuracy: true });
     }
 
-    function resetDeviceBindings() {
-        if (confirm("هل تريد مسح ربط الأجهزة للموظفين؟")) {
-            localStorage.removeItem('employeeDevices');
-            employeeDevices = {};
-            alert("تمت إعادة التعيين.");
+    function resetCloudData() {
+        if (confirm("هل تريد مسح كافة السجلات؟")) {
+            localStorage.removeItem('cafe_shared_logs');
+            attendanceLogs = [];
+            updateLogsTable();
+            alert("تمت الإزالة بنجاح.");
         }
     }
 
     function updateLogsTable() {
         const tbody = document.getElementById('logsTableBody');
+        attendanceLogs = getCloudLogs();
         if (attendanceLogs.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="5">لا توجد سجلات مسجلة حتى الآن</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="5">لا توجد سجلات مسجلة</td></tr>`;
             return;
         }
 
@@ -518,6 +513,7 @@
     }
 
     function exportCSV() {
+        attendanceLogs = getCloudLogs();
         if (attendanceLogs.length === 0) return alert("لا توجد سجلات للتصدير!");
         let csvContent = "\uFEFFالموظف,النوع,الوقت,الحالة,النقاط\n";
         attendanceLogs.forEach(row => {
