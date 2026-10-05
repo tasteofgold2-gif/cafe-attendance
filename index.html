@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" id="htmlRoot">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>tog | Café & Roastery</title>
+    <title id="pageTitle">نظام الحضور والإنصراف | Café & Roastery</title>
     <style>
         :root {
             --primary: #f59e0b;
@@ -15,18 +15,36 @@
             --border-color: rgba(245, 158, 11, 0.3);
             --input-bg: rgba(30, 41, 59, 0.9);
             --shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6);
+            --bg-gradient: linear-gradient(135deg, #090d16 0%, #172033 50%, #1e1b18 100%);
         }
-        * { box-sizing: border-box; }
+        .light-mode {
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-color: #0f172a;
+            --text-muted: #64748b;
+            --border-color: rgba(245, 158, 11, 0.4);
+            --input-bg: rgba(241, 245, 249, 0.9);
+            --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+        * { box-sizing: border-box; transition: background 0.3s, color 0.3s; }
         body {
             font-family: 'Inter', system-ui, sans-serif;
-            background: linear-gradient(135deg, #090d16 0%, #172033 50%, #1e1b18 100%);
+            background: var(--bg-gradient);
             margin: 0; padding: 12px; color: var(--text-color);
             min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .top-bar {
+            width: 100%; max-width: 440px; display: flex; justify-content: space-between; margin-bottom: 10px;
+        }
+        .top-btn {
+            background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color);
+            padding: 8px 14px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 13px;
+            box-shadow: var(--shadow);
         }
         .container {
             width: 100%; max-width: 440px; background: var(--card-bg);
             padding: 24px 20px; border-radius: 20px; box-shadow: var(--shadow);
-            border: 1px solid var(--border-color); margin: 20px auto;
+            border: 1px solid var(--border-color); margin-bottom: 20px;
         }
         h2, h3 { text-align: center; margin-top: 0; font-size: 20px; }
         .input-group { margin: 14px 0; }
@@ -48,46 +66,94 @@
 </head>
 <body>
 
+    <div class="top-bar">
+        <button class="top-btn" id="themeToggleBtn" onclick="toggleTheme()">☀️ / 🌙</button>
+        <button class="top-btn" id="langToggleBtn" onclick="toggleLanguage()">English</button>
+    </div>
+
     <div class="container" id="employeeView">
-        <h2>☕ نظام الحضور الذكي</h2>
-        <div class="status">🛡️ مزمّن سحابياً مع الإدارة وبصمة الجهاز</div>
+        <h2 id="mainHeading">☕ نظام الحضور الذكي</h2>
+        <div class="status" id="syncStatus">🛡️ مزمّن سحابياً مع الإدارة وبصمة الجهاز</div>
         
         <div class="input-group">
             <input type="text" id="employeeName" placeholder="أدخل اسمك الثلاثي">
         </div>
 
-        <button class="btn-in" onclick="registerAttendance('تسجيل حضور')">✨ تسجيل حضور</button>
-        <button class="btn-out" onclick="registerAttendance('تسجيل انصراف')">🚪 تسجيل انصراف</button>
+        <button class="btn-in" onclick="registerAttendance('تسجيل حضور')">✨ <span id="btnInText">تسجيل حضور</span></button>
+        <button class="btn-out" onclick="registerAttendance('تسجيل انصراف')">🚪 <span id="btnOutText">تسجيل انصراف</span></button>
         
         <div style="margin-top:20px; border-top:1px dashed var(--border-color); padding-top:15px;">
-            <button class="btn-admin" onclick="showAdminLogin()">🔐 دخول لوحة المدير (الإكسل)</button>
+            <button class="btn-admin" onclick="showAdminLogin()">🔐 <span id="btnAdminText">دخول لوحة المدير (الإكسل)</span></button>
         </div>
     </div>
 
     <div class="container hidden" id="adminLoginView">
-        <h3>دخول المدير</h3>
+        <h3 id="loginHeading">دخول المدير</h3>
         <div class="input-group">
             <input type="password" id="adminPassword" placeholder="كلمة المرور">
         </div>
-        <button class="btn-admin" onclick="verifyAdmin()">دخول</button>
-        <button class="btn-logout" style="background:#64748b;" onclick="hideAdminLogin()">إلغاء</button>
+        <button class="btn-admin" onclick="verifyAdmin()" id="loginBtn">دخول</button>
+        <button class="btn-logout" style="background:#64748b;" onclick="hideAdminLogin()" id="cancelBtn">إلغاء</button>
     </div>
 
     <div class="container hidden" id="adminDashboardView" style="max-width: 500px;">
-        <h3 style="color: var(--primary);">📊 لوحة التحكم السحابية</h3>
-        <p style="font-size:13px; color:var(--text-muted); text-align:center;">جميع السجلات تذهب مباشرة إلى ملف Google Sheets الخاص بك وتظهر هناك فوراً!</p>
-        <button class="btn-admin" onclick="window.open('https://docs.google.com/spreadsheets', '_blank')">📂 فتح ملف الإكسل السحابي</button>
-        <button class="btn-logout" style="background:#64748b; margin-top:15px;" onclick="logoutAdmin()">🚪 عودة</button>
+        <h3 style="color: var(--primary);" id="dashHeading">📊 لوحة التحكم السحابية</h3>
+        <p style="font-size:13px; color:var(--text-muted); text-align:center;" id="dashDesc">جميع السجلات تذهب مباشرة إلى ملف Google Sheets الخاص بك وتظهر هناك فوراً لكل موظف بجواله!</p>
+        <button class="btn-admin" onclick="window.open('https://docs.google.com/spreadsheets', '_blank')" id="openExcelBtn">📂 فتح ملف الإكسل السحابي</button>
+        <button class="btn-logout" style="background:#64748b; margin-top:15px;" onclick="logoutAdmin()" id="backBtn">🚪 عودة</button>
     </div>
 
 <script>
     // ضع هنا رابط Web App الخاص بك بين القوسين أدناه:
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxouDR7d53yHHo3Lgq0uTkcfjnRjEgJ7zHQ7ECthHZ1O3C2cI4WhBLUcsWWevjCqCObqQ/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxouDR7d53yHHo3Lgq0uTkcfjnRJeG7zHQ7ECthHZ103C2cI4WhBLUcsWWevjCqCObqQ/exec";
 
-    let myDeviceId = localStorage.getItem('myDeviceId');
-    if (!myDeviceId) {
-        myDeviceId = 'dev_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('myDeviceId', myDeviceId);
+    let currentLang = 'ar';
+    let isLightMode = false;
+
+    function toggleTheme() {
+        isLightMode = !isLightMode;
+        document.getElementById('htmlRoot').classList.toggle('light-mode', isLightMode);
+    }
+
+    function toggleLanguage() {
+        currentLang = currentLang === 'ar' ? 'en' : 'ar';
+        const root = document.getElementById('htmlRoot');
+        root.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+        root.setAttribute('lang', currentLang);
+
+        if (currentLang === 'en') {
+            document.getElementById('langToggleBtn').innerText = 'العربية';
+            document.getElementById('mainHeading').innerText = '☕ Smart Attendance';
+            document.getElementById('syncStatus').innerText = '🛡️ Cloud Synced & Device Locked';
+            document.getElementById('employeeName').placeholder = 'Enter your full name';
+            document.getElementById('btnInText').innerText = 'Check In';
+            document.getElementById('btnOutText').innerText = 'Check Out';
+            document.getElementById('btnAdminText').innerText = 'Admin Dashboard (Excel)';
+            document.getElementById('loginHeading').innerText = 'Admin Login';
+            document.getElementById('adminPassword').placeholder = 'Password';
+            document.getElementById('loginBtn').innerText = 'Login';
+            document.getElementById('cancelBtn').innerText = 'Cancel';
+            document.getElementById('dashHeading').innerText = '📊 Cloud Dashboard';
+            document.getElementById('dashDesc').innerText = 'All logs go directly to your Google Sheets instantly!';
+            document.getElementById('openExcelBtn').innerText = '📂 Open Cloud Excel';
+            document.getElementById('backBtn').innerText = '🚪 Back';
+        } else {
+            document.getElementById('langToggleBtn').innerText = 'English';
+            document.getElementById('mainHeading').innerText = '☕ نظام الحضور الذكي';
+            document.getElementById('syncStatus').innerText = '🛡️ مزمّن سحابياً مع الإدارة وبصمة الجهاز';
+            document.getElementById('employeeName').placeholder = 'أدخل اسمك الثلاثي';
+            document.getElementById('btnInText').innerText = 'تسجيل حضور';
+            document.getElementById('btnOutText').innerText = 'تسجيل انصراف';
+            document.getElementById('btnAdminText').innerText = 'دخول لوحة المدير (الإكسل)';
+            document.getElementById('loginHeading').innerText = 'دخول المدير';
+            document.getElementById('adminPassword').placeholder = 'كلمة المرور';
+            document.getElementById('loginBtn').innerText = 'دخول';
+            document.getElementById('cancelBtn').innerText = 'إلغاء';
+            document.getElementById('dashHeading').innerText = '📊 لوحة التحكم السحابية';
+            document.getElementById('dashDesc').innerText = 'جميع السجلات تذهب مباشرة إلى ملف Google Sheets الخاص بك وتظهر هناك فوراً!';
+            document.getElementById('openExcelBtn').innerText = '📂 فتح ملف الإكسل السحابي';
+            document.getElementById('backBtn').innerText = '🚪 عودة';
+        }
     }
 
     function getMobileDeviceType() {
@@ -112,7 +178,7 @@
             document.getElementById('adminLoginView').classList.add('hidden');
             document.getElementById('adminDashboardView').classList.remove('hidden');
         } else {
-            alert("كلمة المرور غير صحيحة!");
+            alert(currentLang === 'ar' ? "كلمة المرور غير صحيحة!" : "Incorrect password!");
         }
     }
     function logoutAdmin() {
@@ -123,13 +189,13 @@
     function registerAttendance(type) {
         let name = document.getElementById('employeeName').value.trim();
         if (!name) {
-            alert("الرجاء إدخال اسمك أولاً!");
+            alert(currentLang === 'ar' ? "الرجاء إدخال اسمك أولاً!" : "Please enter your name first!");
             return;
         }
 
         let lastRegistered = localStorage.getItem('last_reg_name');
         if(lastRegistered === name) {
-            alert("لقد قمت بتسجيل الحضور مسبقاً من هذا الجهاز!");
+            alert(currentLang === 'ar' ? "لقد قمت بتسجيل الحضور مسبقاً من هذا الجهاز!" : "You have already checked in from this device!");
             return;
         }
 
@@ -138,9 +204,9 @@
             name: name,
             type: type,
             time: now.toLocaleString('ar-SA'),
-            status: type === 'تسجيل حضور' ? 'في الموعد' : 'انصراف',
+            status: type === 'تسجيل حضور' || type === 'Check In' ? 'في الموعد' : 'انصراف',
             device: getMobileDeviceType(),
-            points: type === 'تسجيل حضور' ? 1 : 0
+            points: type.includes('حضور') || type.includes('In') ? 1 : 0
         };
 
         fetch(GOOGLE_SCRIPT_URL, {
@@ -150,10 +216,10 @@
             body: JSON.stringify(data)
         }).then(() => {
             localStorage.setItem('last_reg_name', name);
-            alert(`✅ تم ${type} بنجاح وسُجل في نظام الإدارة الفوري!`);
+            alert(currentLang === 'ar' ? `✅ تم التسجيل بنجاح وسُجل في نظام الإدارة!` : `✅ Registered successfully!`);
             document.getElementById('employeeName').value = '';
         }).catch(error => {
-            alert("حدث خطأ في الاتصال بالشبكة، تأكد من الإنترنت.");
+            alert(currentLang === 'ar' ? "حدث خطأ في الاتصال بالشبكة." : "Network connection error.");
         });
     }
 </script>
