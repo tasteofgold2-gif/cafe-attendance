@@ -133,7 +133,6 @@
     let currentLang = 'ar';
     let isDark = true;
 
-    // توليد أو جلب بصمة الجهاز الفريدة لمنع التكرار
     let deviceId = localStorage.getItem('tog_device_id');
     if (!deviceId) {
         deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
@@ -224,27 +223,35 @@
             return;
         }
 
-        // فحص قفل الجهاز لمنع التكرار لهذا اليوم
         const todayStr = new Date().toDateString();
         let lastRegDate = localStorage.getItem('tog_last_date');
         let lastRegDevice = localStorage.getItem('tog_last_device');
 
         if (lastRegDate === todayStr && lastRegDevice === deviceId) {
-            alert(currentLang === 'ar' ? "❌ لقد قمت بالتسجيل مسبقاً من هذا الجهاز اليوم ولا يمكن التكرار!" : "❌ You have already checked in from this device today!");
+            alert(currentLang === 'ar' ? "❌ لقد قمت بالتسجيل مسبقاً من هذا الجهاز اليوم!" : "❌ You have already checked in from this device today!");
             return;
         }
 
+        // تنسيق التاريخ والوقت بدقة تامة (السنة/الشهر/اليوم - الساعة:الدقيقة:الثانية)
         const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        
+        const formattedDateTime = `${year}/${month}/${day} - ${hours}:${minutes}:${seconds}`;
+
         const data = {
             name: name,
             type: type,
-            time: now.toLocaleString('ar-SA'),
+            time: formattedDateTime,
             status: type.includes('حضور') || type.includes('In') ? 'في الموعد' : 'انصراف',
             device: getMobileDeviceType(),
             points: type.includes('حضور') || type.includes('In') ? 1 : 0
         };
 
-        // استخدام طريقة إرسال مضمونة 100% لتصل البيانات للإكسل مباشرة
         fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
@@ -252,7 +259,7 @@
         }).then(() => {
             localStorage.setItem('tog_last_date', todayStr);
             localStorage.setItem('tog_last_device', deviceId);
-            alert(currentLang === 'ar' ? `✅ تم ${type} بنجاح وسُجل في سحابة TOG!` : `✅ Registered successfully!`);
+            alert(currentLang === 'ar' ? `✅ تم ${type} بنجاح وفي الوقت المحدد!` : `✅ Registered successfully!`);
             document.getElementById('employeeName').value = '';
         }).catch(error => {
             alert(currentLang === 'ar' ? "حدث خطأ في الاتصال بالسحابة." : "Cloud connection error.");
