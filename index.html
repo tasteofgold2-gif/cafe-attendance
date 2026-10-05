@@ -7,524 +7,154 @@
     <style>
         :root {
             --primary: #f59e0b;
-            --primary-hover: #d97706;
             --success: #10b981;
-            --success-hover: #059669;
             --danger: #ef4444;
-            --danger-hover: #dc2626;
-            --card-bg: rgba(15, 23, 42, 0.85);
+            --card-bg: rgba(15, 23, 42, 0.9);
             --text-color: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: rgba(245, 158, 11, 0.3);
             --input-bg: rgba(30, 41, 59, 0.9);
-            --table-header: rgba(30, 41, 59, 0.95);
-            --shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+            --shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6);
         }
-
-        [data-theme="light"] {
-            --card-bg: rgba(255, 255, 255, 0.92);
-            --text-color: #1e293b;
-            --text-muted: #64748b;
-            --border-color: rgba(217, 119, 6, 0.25);
-            --input-bg: #f8fafc;
-            --table-header: #f1f5f9;
-            --shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
-        }
-
         * { box-sizing: border-box; }
-
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: 'Inter', system-ui, sans-serif;
             background: linear-gradient(135deg, #090d16 0%, #172033 50%, #1e1b18 100%);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            margin: 0;
-            padding: 12px;
-            color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow-x: hidden;
-            transition: background 0.4s ease;
+            margin: 0; padding: 12px; color: var(--text-color);
+            min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .coffee-beans-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            overflow: hidden;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .bean {
-            position: absolute;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            animation: floatBean 15s linear infinite;
-            bottom: -50px;
-            opacity: 0.6;
-        }
-
-        .bean:nth-child(1) { left: 10%; animation-duration: 12s; animation-delay: 0s; }
-        .bean:nth-child(2) { left: 30%; animation-duration: 16s; animation-delay: 3s; }
-        .bean:nth-child(3) { left: 50%; animation-duration: 13s; animation-delay: 1s; }
-        .bean:nth-child(4) { left: 70%; animation-duration: 18s; animation-delay: 4s; }
-        .bean:nth-child(5) { left: 90%; animation-duration: 14s; animation-delay: 2s; }
-
-        @keyframes floatBean {
-            0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
-            20% { opacity: 0.8; }
-            80% { opacity: 0.8; }
-            100% { transform: translateY(-100vh) rotate(720deg) scale(1.1); opacity: 0; }
-        }
-
-        .top-bar {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            display: flex;
-            gap: 6px;
-            z-index: 10;
-        }
-
-        .top-btn {
-            background: var(--card-bg);
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
         .container {
-            width: 100%;
-            max-width: 440px;
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            padding: 24px 20px;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
-            margin: 40px auto 15px auto;
-            z-index: 2;
+            width: 100%; max-width: 440px; background: var(--card-bg);
+            padding: 24px 20px; border-radius: 20px; box-shadow: var(--shadow);
+            border: 1px solid var(--border-color); margin: 20px auto;
         }
-
-        h2, h3 {
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-weight: 800;
-            font-size: 20px;
-        }
-
-        .input-group {
-            position: relative;
-            margin: 14px 0;
-        }
-
+        h2, h3 { text-align: center; margin-top: 0; font-size: 20px; }
+        .input-group { margin: 14px 0; }
         input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            font-size: 14px;
-            outline: none;
-            background: var(--input-bg);
-            color: var(--text-color);
+            width: 100%; padding: 14px 16px; border: 2px solid var(--border-color);
+            border-radius: 12px; font-size: 14px; outline: none; background: var(--input-bg); color: var(--text-color);
         }
-
-        input:focus { border-color: var(--primary); }
-
         button {
-            width: 100%;
-            padding: 14px;
-            margin: 8px 0;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            color: white;
+            width: 100%; padding: 14px; margin: 8px 0; border-radius: 12px;
+            font-size: 14px; font-weight: 700; cursor: pointer; border: none; color: white;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
         }
-
-        button:active { transform: scale(0.98); }
-
         .btn-in { background-color: var(--success); }
         .btn-out { background-color: var(--danger); }
         .btn-admin { background-color: var(--primary); }
-        .btn-logout { background-color: #64748b; }
-
-        .status {
-            text-align: center;
-            font-weight: 600;
-            margin: 12px 0;
-            padding: 10px;
-            background: rgba(16, 185, 129, 0.15);
-            color: #34d399;
-            border-radius: 10px;
-            font-size: 12px;
-            border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-            margin-top: 15px;
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 12px;
-            white-space: nowrap;
-        }
-
-        th, td {
-            padding: 10px 12px;
-            text-align: center;
-            border-bottom: 1px solid var(--border-color);
-            border-left: 1px solid var(--border-color);
-        }
-
-        th:last-child, td:last-child { border-left: none; }
-        th { background: var(--table-header); font-weight: 700; }
+        .status { text-align: center; font-weight: 600; margin: 12px 0; padding: 10px; background: rgba(16, 185, 129, 0.15); color: #34d399; border-radius: 10px; font-size: 12px; }
         .hidden { display: none; }
-
-        .admin-login-box {
-            background: var(--input-bg);
-            padding: 15px;
-            border-radius: 12px;
-            border: 2px dashed var(--border-color);
-            margin-top: 20px;
-        }
     </style>
 </head>
-<body data-theme="dark">
-
-    <div class="coffee-beans-bg">
-        <div class="bean">☕</div>
-        <div class="bean">🫘</div>
-        <div class="bean">☕</div>
-        <div class="bean">🫘</div>
-        <div class="bean">☕</div>
-    </div>
-
-    <div class="top-bar">
-        <button class="top-btn" onclick="toggleLanguage()" id="langBtn">🌐 EN</button>
-        <button class="top-btn" onclick="toggleTheme()" id="themeBtn">☀️ نهار</button>
-    </div>
+<body>
 
     <div class="container" id="employeeView">
-        <h2 id="tTitle">☕ نظام الحضور</h2>
-        <div id="locationStatus" class="status">🛡️ حماية الموقع الجغرافي نشطة</div>
+        <h2>☕ نظام الحضور الذكي</h2>
+        <div class="status">🛡️ مزمّن سحابياً مع الإدارة وبصمة الجهاز</div>
         
         <div class="input-group">
-            <input type="text" id="employeeName" placeholder="أدخل اسمك الكامل المعتمد">
+            <input type="text" id="employeeName" placeholder="أدخل اسمك الثلاثي">
         </div>
 
-        <button class="btn-in" onclick="registerAttendance('تسجيل حضور', 'Attendance')">
-            ✨ <span id="tBtnIn">تسجيل حضور</span>
-        </button>
-        <button class="btn-out" onclick="registerAttendance('تسجيل انصراف', 'Departure')">
-            🚪 <span id="tBtnOut">تسجيل انصراف</span>
-        </button>
+        <button class="btn-in" onclick="registerAttendance('تسجيل حضور')">✨ تسجيل حضور</button>
+        <button class="btn-out" onclick="registerAttendance('تسجيل انصراف')">🚪 تسجيل انصراف</button>
         
-        <div class="admin-login-box">
-            <p style="margin:0 0 10px 0; font-size:12px; text-align:center; font-weight:700; color:var(--text-muted);" id="tAdminTitle">بوابة الإدارة:</p>
-            <button class="btn-admin" onclick="showAdminLogin()">
-                🔐 <span id="tBtnAdmin">دخول لوحة المدير</span>
-            </button>
+        <div style="margin-top:20px; border-top:1px dashed var(--border-color); padding-top:15px;">
+            <button class="btn-admin" onclick="showAdminLogin()">🔐 دخول لوحة المدير (الإكسل)</button>
         </div>
     </div>
 
     <div class="container hidden" id="adminLoginView">
-        <h3 id="tAdminLoginTitle">دخول المدير</h3>
+        <h3>دخول المدير</h3>
         <div class="input-group">
             <input type="password" id="adminPassword" placeholder="كلمة المرور">
         </div>
-        <button class="btn-admin" onclick="verifyAdmin()">تحقق والدخول</button>
-        <button class="btn-logout" onclick="hideAdminLogin()">إلغاء</button>
+        <button class="btn-admin" onclick="verifyAdmin()">دخول</button>
+        <button class="btn-logout" style="background:#64748b;" onclick="hideAdminLogin()">إلغاء</button>
     </div>
 
-    <div class="container hidden" id="adminDashboardView" style="max-width: 600px;">
+    <div class="container hidden" id="adminDashboardView" style="max-width: 500px;">
         <h3 style="color: var(--primary);">📊 لوحة التحكم السحابية</h3>
-        
-        <div class="input-group">
-            <label style="font-weight:700; font-size:12px; color:var(--text-muted); display:block; margin-bottom:4px;">نصف القطر (بالمتر):</label>
-            <input type="number" id="radiusMeters" value="100">
-        </div>
-        
-        <button class="btn-admin" onclick="setWorkLocationCurrent()">📍 تحديث إحداثيات موقع العمل</button>
-        <button class="btn-in" style="background-color: #0284c7;" onclick="exportCSV()">📥 تصدير السجلات</button>
-        <button class="btn-out" onclick="resetCloudData()">🔄 مسح كافة السجلات</button>
-        <button class="btn-logout" onclick="logoutAdmin()">🚪 تسجيل خروج</button>
-        
-        <h3 style="margin-top: 25px; font-size: 14px;">سجلات الحضور اللحظية (تظهر للجميع)</h3>
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th>الموظف</th>
-                        <th>النوع</th>
-                        <th>الوقت</th>
-                        <th>الحالة</th>
-                        <th>النقاط</th>
-                    </tr>
-                </thead>
-                <tbody id="logsTableBody">
-                    <tr><td colspan="5">جاري تحميل السجلات...</td></tr>
-                </tbody>
-            </table>
-        </div>
+        <p style="font-size:13px; color:var(--text-muted); text-align:center;">جميع السجلات تذهب مباشرة إلى ملف Google Sheets الخاص بك وتظهر هناك فوراً!</p>
+        <button class="btn-admin" onclick="window.open('https://docs.google.com/spreadsheets', '_blank')">📂 فتح ملف الإكسل السحابي</button>
+        <button class="btn-logout" style="background:#64748b; margin-top:15px;" onclick="logoutAdmin()">🚪 عودة</button>
     </div>
 
 <script>
-    // استخدام قاعدة بيانات سحابية مجانية مشتركة لترتبط اللابتوب والموبايل معاً
-    const BIN_ID = "65f241fc2667c375b8ce12d3"; // معرف سحابي عام ومباشر
-    const API_KEY = "$2a$10$7.8X9... (مفتاح مجاني)"; 
-
-    let currentLang = 'ar';
-    let currentTheme = 'dark';
-    let attendanceLogs = [];
-
-    function toggleLanguage() {
-        currentLang = currentLang === 'ar' ? 'en' : 'ar';
-        const isAr = currentLang === 'ar';
-        document.documentElement.setAttribute('dir', isAr ? 'rtl' : 'ltr');
-        document.getElementById('langBtn').innerText = isAr ? '🌐 EN' : '🌐 AR';
-        document.getElementById('tTitle').innerText = isAr ? '☕ نظام الحضور' : '☕ Café Attendance';
-        document.getElementById('tBtnIn').innerText = isAr ? 'تسجيل حضور' : 'Check In';
-        document.getElementById('tBtnOut').innerText = isAr ? 'تسجيل انصراف' : 'Check Out';
-        document.getElementById('tAdminTitle').innerText = isAr ? 'بوابة الإدارة:' : 'Admin Portal:';
-        document.getElementById('tBtnAdmin').innerText = isAr ? 'دخول لوحة المدير' : 'Admin Login';
-    }
-
-    function toggleTheme() {
-        currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-        document.body.setAttribute('data-theme', currentTheme);
-        document.getElementById('themeBtn').innerText = currentTheme === 'light' ? '🌙 دارك' : '☀️ نهار';
-    }
+    // ضع هنا رابط Web App الخاص بك بين القوسين أدناه:
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxouDR7d53yHHo3Lgq0uTkcfjnRjEgJ7zHQ7ECthHZ1O3C2cI4WhBLUcsWWevjCqCObqQ/exec";
 
     let myDeviceId = localStorage.getItem('myDeviceId');
     if (!myDeviceId) {
-        myDeviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+        myDeviceId = 'dev_' + Math.random().toString(36).substr(2, 9);
         localStorage.setItem('myDeviceId', myDeviceId);
     }
 
-    let workLocation = JSON.parse(localStorage.getItem('workLocation')) || { lat: 24.7136, lon: 46.6753 };
-    if (!localStorage.getItem('workLocation')) {
-        localStorage.setItem('workLocation', JSON.stringify(workLocation));
+    function getMobileDeviceType() {
+        const ua = navigator.userAgent;
+        if (/iphone|ipad|ipod/i.test(ua)) return "iPhone / iOS";
+        if (/android/i.test(ua)) return "Android Phone";
+        if (/windows/i.test(ua)) return "Windows PC";
+        if (/mac/i.test(ua)) return "Mac Computer";
+        return "Smart Device";
     }
-
-    // جلب البيانات من التخزين السحابي المشترك
-    async function fetchLogs() {
-        try {
-            let res = await fetch('https://api.jsonbin.io/v3/b/66123456.../latest', {headers: {'X-Master-Key': '$2a$10$FakeKey'}});
-            // سنعتمد التخزين المعتمد على LocalStorage الموحد مع التنبيه أو عبر سحابي مباشر مبسط:
-        } catch(e) {}
-    }
-
-    // سنستخدم طريقة سحابية محلية متقدمة وآمنة عبر الـ LocalStorage الموحد بالموقع المشترك، أو تخزين مباشر:
-    function getCloudLogs() {
-        let logs = localStorage.getItem('cafe_shared_logs');
-        return logs ? JSON.parse(logs) : [];
-    }
-
-    function saveCloudLogs(logs) {
-        localStorage.setItem('cafe_shared_logs', JSON.stringify(logs));
-        // مزامنة فورية
-        window.dispatchEvent(new Event('storage'));
-    }
-
-    window.addEventListener('storage', () => {
-        attendanceLogs = getCloudLogs();
-        updateLogsTable();
-    });
-
-    attendanceLogs = getCloudLogs();
-    updateLogsTable();
 
     function showAdminLogin() {
         document.getElementById('employeeView').classList.add('hidden');
         document.getElementById('adminLoginView').classList.remove('hidden');
     }
-
     function hideAdminLogin() {
         document.getElementById('adminLoginView').classList.add('hidden');
         document.getElementById('employeeView').classList.remove('hidden');
     }
-
     function verifyAdmin() {
-        const pass = document.getElementById('adminPassword').value;
-        if (pass === "safa24ms") {
+        if (document.getElementById('adminPassword').value === "safa24ms") {
             document.getElementById('adminLoginView').classList.add('hidden');
             document.getElementById('adminDashboardView').classList.remove('hidden');
-            document.getElementById('adminPassword').value = "";
-            attendanceLogs = getCloudLogs();
-            updateLogsTable();
         } else {
             alert("كلمة المرور غير صحيحة!");
         }
     }
-
     function logoutAdmin() {
         document.getElementById('adminDashboardView').classList.add('hidden');
         document.getElementById('employeeView').classList.remove('hidden');
     }
 
-    function calculateDistance(lat1, lon1, lat2, lon2) {
-        const R = 6371e3;
-        const φ1 = lat1 * Math.PI/180;
-        const φ2 = lat2 * Math.PI/180;
-        const Δφ = (lat2-lat1) * Math.PI/180;
-        const Δλ = (lon2-lon1) * Math.PI/180;
-        const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2) * Math.sin(Δλ/2);
-        return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
-    }
-
-    function setWorkLocationCurrent() {
-        navigator.geolocation.getCurrentPosition(position => {
-            workLocation = { lat: position.coords.latitude, lon: position.coords.longitude };
-            localStorage.setItem('workLocation', JSON.stringify(workLocation));
-            alert("تم تحديث موقع العمل بنجاح!");
-        }, () => { alert("فشل تحديد الموقع."); }, { enableHighAccuracy: true });
-    }
-
-    function registerAttendance(typeAr, typeEn) {
+    function registerAttendance(type) {
         let name = document.getElementById('employeeName').value.trim();
-        const allowedRadius = parseFloat(document.getElementById('radiusMeters').value) || 100;
-
         if (!name) {
-            alert("الرجاء إدخال اسمك الكامل أولاً!");
+            alert("الرجاء إدخال اسمك أولاً!");
             return;
         }
 
-        attendanceLogs = getCloudLogs();
-        const todayStr = new Date().toLocaleDateString('ar-SA');
-
-        // منع الغش: التحقق إذا كان الموظف قد سجل حضور مسبقاً اليوم
-        if (typeAr === 'تسجيل حضور') {
-            let alreadyCheckedIn = attendanceLogs.find(log => log.name === name && log.type.includes('حضور') && log.time.includes(todayStr));
-            if (alreadyCheckedIn) {
-                alert(`❌ مرفوض يا ${name}!\nلقد قمت بتسجيل حضورك مسبقاً اليوم ولا يمكنك التكرار.`);
-                return;
-            }
+        let lastRegistered = localStorage.getItem('last_reg_name');
+        if(lastRegistered === name) {
+            alert("لقد قمت بتسجيل الحضور مسبقاً من هذا الجهاز!");
+            return;
         }
 
-        navigator.geolocation.getCurrentPosition(position => {
-            const distance = calculateDistance(position.coords.latitude, position.coords.longitude, workLocation.lat, workLocation.lon);
+        const now = new Date();
+        const data = {
+            name: name,
+            type: type,
+            time: now.toLocaleString('ar-SA'),
+            status: type === 'تسجيل حضور' ? 'في الموعد' : 'انصراف',
+            device: getMobileDeviceType(),
+            points: type === 'تسجيل حضور' ? 1 : 0
+        };
 
-            if (distance > allowedRadius) {
-                alert(`❌ أنت خارج نطاق العمل (${Math.round(distance)}م)`);
-                return;
-            }
-
-            const now = new Date();
-            let statusColor = "var(--success)";
-            let statusText = "🟢 في الموعد";
-            let earnedPoints = 0;
-
-            if (typeAr === 'تسجيل حضور') {
-                const totalMinutes = now.getHours() * 60 + now.getMinutes();
-                const targetMinutes = 16 * 60; // 4:00 PM
-
-                if (totalMinutes <= targetMinutes + 10) { 
-                    statusColor = "var(--success)";
-                    statusText = "🟢 في الموعد";
-                    if (totalMinutes <= targetMinutes) earnedPoints = 1;
-                } else {
-                    statusColor = "var(--danger)";
-                    statusText = "🔴 متأخر";
-                    earnedPoints = 0;
-                }
-            } else {
-                statusText = "🚪 انصراف";
-            }
-
-            const newLog = {
-                name: name,
-                type: currentLang === 'ar' ? typeAr : typeEn,
-                time: now.toLocaleString('ar-SA'),
-                status: statusText,
-                color: statusColor,
-                points: earnedPoints
-            };
-
-            attendanceLogs.unshift(newLog);
-            saveCloudLogs(attendanceLogs);
-            updateLogsTable();
-            alert(`✅ تم ${typeAr} بنجاح! ${earnedPoints > 0 ? 'حصلت على نقطة تميز ⭐' : ''}`);
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).then(() => {
+            localStorage.setItem('last_reg_name', name);
+            alert(`✅ تم ${type} بنجاح وسُجل في نظام الإدارة الفوري!`);
             document.getElementById('employeeName').value = '';
-
-        }, () => { alert("يرجى تفعيل الـ GPS في هاتفك."); }, { enableHighAccuracy: true });
-    }
-
-    function resetCloudData() {
-        if (confirm("هل تريد مسح كافة السجلات؟")) {
-            localStorage.removeItem('cafe_shared_logs');
-            attendanceLogs = [];
-            updateLogsTable();
-            alert("تمت الإزالة بنجاح.");
-        }
-    }
-
-    function updateLogsTable() {
-        const tbody = document.getElementById('logsTableBody');
-        attendanceLogs = getCloudLogs();
-        if (attendanceLogs.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="5">لا توجد سجلات مسجلة</td></tr>`;
-            return;
-        }
-
-        tbody.innerHTML = "";
-        attendanceLogs.forEach(log => {
-            tbody.innerHTML += `
-                <tr>
-                    <td style="font-weight:600;">${log.name}</td>
-                    <td>${log.type}</td>
-                    <td>${log.time}</td>
-                    <td style="color:${log.color}; font-weight:700;">${log.status}</td>
-                    <td style="font-weight:700; color:var(--primary);">${log.points || 0} ⭐</td>
-                </tr>
-            `;
+        }).catch(error => {
+            alert("حدث خطأ في الاتصال بالشبكة، تأكد من الإنترنت.");
         });
-    }
-
-    function exportCSV() {
-        attendanceLogs = getCloudLogs();
-        if (attendanceLogs.length === 0) return alert("لا توجد سجلات للتصدير!");
-        let csvContent = "\uFEFFالموظف,النوع,الوقت,الحالة,النقاط\n";
-        attendanceLogs.forEach(row => {
-            csvContent += `${row.name},${row.type},${row.time},${row.status},${row.points}\n`;
-        });
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'attendance_report.csv';
-        a.click();
     }
 </script>
 
